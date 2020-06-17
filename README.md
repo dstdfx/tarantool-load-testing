@@ -1,20 +1,20 @@
 # tarantool-load-testing
 
 Table of contents:
-1. [Introduction](#Introduction)
-2. [Environment](#Environment)
-3. [Tarantool Operator](#Tarantol Operator)
-4. [CRUD application](#CRUD application)  
-  4.1 [Topology](#Topology)  
-  4.2 [Deploy](#Deploy)  
-  4.3 [Scaling](#Scaling)  
-  4.4 [Clean up](#Clean up)  
-  4.5 [Admin panel](#Admin panel)
-5. [Deploy Prometheus and Grafana via Helm](#Deploy Prometheus and Grafana via Helm)
-6. [Load testing with Yandex.Tank](#Load testing via Yandex.Tank)  
-  6.1 [Read test](#Read test)  
-  6.2 [Write test](#Write test)  
-  6.3 [Failover test](#Failover test)
+1. [Introduction](#introduction)
+2. [Environment](#environment)
+3. [Tarantool Operator](#tarantol-operator)
+4. [CRUD application](#crud-application)  
+  4.1 [Topology](#topology)  
+  4.2 [Deploy](#deploy)  
+  4.3 [Scaling](#scaling)  
+  4.4 [Clean up](#clean-up)  
+  4.5 [Admin panel](#admin-panel)
+5. [Deploy Prometheus and Grafana via Helm](#deploy-prometheus-and-grafana-via-helm)
+6. [Load testing via Yandex.Tank](#load-testing-via-yandextank)  
+  6.1 [Read test](#read-test)  
+  6.2 [Write test](#write-test)  
+  6.3 [Failover test](#failover-test)
 7. WIP
 
 ## Introduction
