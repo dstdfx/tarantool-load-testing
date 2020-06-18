@@ -18,7 +18,7 @@ spec:
   selector:
     matchLabels:
       tarantool.io/replicaset-template: "storage-template"
-  numReplicasets: 1
+  numReplicasets: 3
 ---
 apiVersion: tarantool.io/v1alpha1
 kind: Role
@@ -31,7 +31,7 @@ spec:
   selector:
     matchLabels:
       tarantool.io/replicaset-template: "router-template"
-  numReplicasets: 1
+  numReplicasets: 3
 ---
 apiVersion: tarantool.io/v1alpha1
 kind: ReplicasetTemplate
@@ -42,7 +42,7 @@ metadata:
     tarantool.io/replicaset-template: "storage-template"
     tarantool.io/role: "storage"
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       tarantool.io/pod-template: "storage-pod-template"
@@ -102,7 +102,7 @@ metadata:
     tarantool.io/replicaset-template: "router-template"
     tarantool.io/role: "router"
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       tarantool.io/pod-template: "router-pod-template"
