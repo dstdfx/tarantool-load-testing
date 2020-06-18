@@ -1,7 +1,10 @@
-# tarantool-load-testing
+# Tarantool load testing
 
-Table of contents:
-* [Introduction](#introduction)
+This repository contains the final project of OTUS database management course.
+For educational purposes only.
+
+## Table of contents
+
 * [Environment](#environment)
 * [Tarantool Operator](#tarantol-operator)
 * [CRUD application](#crud-application)  
@@ -16,11 +19,6 @@ Table of contents:
   * [Write test](#write-test)  
   * [Failover test](#failover-test)
 * WIP
-
-## Introduction
-
-This repository contains the final project of OTUS database management course.
-For educational purposes only.
 
 ## Environment
 
