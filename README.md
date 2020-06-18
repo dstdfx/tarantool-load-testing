@@ -183,9 +183,7 @@ kubectl --namespace default port-forward $POD_NAME 3000
 ```
 
 Open `http://localhost:3000/login` in your browser to access to Grafana UI. Use credentials from previous commands.
-Add Prometheus data source and import prepared dashboard (id: 1860):
-![grafana-add-datasource](./screenshots/grafana-add-datasource.png)
-![grafana-add-datasource](./screenshots/grafana-import-dashboard.png)
+Add Prometheus data source and import prepared dashboard (id: 1860).
 
 As a result we can observe the utilization of our worker nodes:
 ![grafana-ui](./screenshots/grafana-ui.png)
