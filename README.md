@@ -1,21 +1,21 @@
 # tarantool-load-testing
 
 Table of contents:
-1. [Introduction](#introduction)
-2. [Environment](#environment)
-3. [Tarantool Operator](#tarantol-operator)
-4. [CRUD application](#crud-application)  
-  4.1 [Topology](#topology)  
-  4.2 [Deploy](#deploy)  
-  4.3 [Scaling](#scaling)  
-  4.4 [Clean up](#clean-up)  
-  4.5 [Admin panel](#admin-panel)
-5. [Deploy Prometheus and Grafana via Helm](#deploy-prometheus-and-grafana-via-helm)
-6. [Load testing via Yandex.Tank](#load-testing-via-yandextank)  
-  6.1 [Read test](#read-test)  
-  6.2 [Write test](#write-test)  
-  6.3 [Failover test](#failover-test)
-7. WIP
+* [Introduction](#introduction)
+* [Environment](#environment)
+* [Tarantool Operator](#tarantol-operator)
+* [CRUD application](#crud-application)  
+  * [Topology](#topology)  
+  * [Deploy](#deploy)  
+  * [Scaling](#scaling)  
+  * [Clean up](#clean-up)  
+  * [Admin panel](#admin-panel)
+* [Deploy Prometheus and Grafana via Helm](#deploy-prometheus-and-grafana-via-helm)
+* [Load testing via Yandex.Tank](#load-testing-via-yandextank)  
+  * [Read test](#read-test)  
+  * [Write test](#write-test)  
+  * [Failover test](#failover-test)
+* WIP
 
 ## Introduction
 
@@ -58,7 +58,7 @@ kubectl create -f https://raw.githubusercontent.com/tarantool/tarantool-operator
 
 ## CRUD Application
 
-Test app is just a Tarantool-based distributed key-value storage. 
+Test app is just a Tarantool-based distributed key-value storage.  
 Each instance is running along with storage on the same level.
 
 Originally taken from tarantool-operator examples:
