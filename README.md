@@ -25,6 +25,7 @@ For educational purposes only.
 - Kubernetes cluster v1.16.9
 - 3 worker nodes (Ubuntu 18.04 LTS 64-bit/2 vCPU/8 GB/30 GB)
 - Loader VM (Ubuntu 18.04 LTS 64-bit/8 vCPU/16 GB RAM/5 GB)  
+- Tarantool version: `v1.10.3-136-gc3c087d`
 
 Loader VM is used to run Yandex.Tank load testing from.
 
@@ -151,6 +152,7 @@ kubectl delete -f kv-app/deployment.yaml
 
 Prometheus + Grafana are used to collect and represent a plenty of metrics in a human-friendly way.  
 In our case we will check worker nodes resource utilization.
+For the sake of simplicity we won't use persistent storage for metrics.
 
 Install Prometheus using Helm:
 ```bash
