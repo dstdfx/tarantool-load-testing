@@ -152,6 +152,7 @@ kubectl delete -f kv-app/deployment.yaml
 Prometheus + Grafana are used to collect and represent a plenty of metrics in a human-friendly way.  
 In our case we will check worker nodes resource utilization.
 
+Install Prometheus using Helm:
 ```bash
 helm install prometheus stable/prometheus --set alertmanager.enabled=false \
                                           --set server.persistentVolume.enabled=false \
@@ -159,9 +160,35 @@ helm install prometheus stable/prometheus --set alertmanager.enabled=false \
                                           --set configmapReload.prometheus.enabled=false
 ```
 
+Get the Prometheus server URL by running these commands in the same shell:
+```bash
+export POD_NAME=$(kubectl get pods --namespace default -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name}")
+kubectl --namespace default port-forward $POD_NAME 9090
+```
+
+Install Grafana using Helm:
 ```bash
 helm install grafana stable/grafana
 ```
+
+Get Grafana 'admin' user password by running:
+```bash
+kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+
+Get the Grafana URL to visit by running these commands in the same shell:
+```bash
+export POD_NAME=$(kubectl get pods --namespace default -l "app=grafana,release=grafana" -o jsonpath="{.items[0].metadata.name}")
+kubectl --namespace default port-forward $POD_NAME 3000
+```
+
+Open `http://localhost:3000/login` in your browser to access to Grafana UI. Use credentials from previous commands.
+Add Prometheus data source and import prepared dashboard (id: 1860):
+![grafana-add-datasource](./screenshots/grafana-add-datasource.png)
+![grafana-add-datasource](./screenshots/grafana-import-dashboard.png)
+
+As a result we can observe the utilization of our worker nodes:
+![grafana-ui](./screenshots/grafana-ui.png)
 
 ## Load testing via Yandex.Tank
 
