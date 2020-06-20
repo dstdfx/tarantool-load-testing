@@ -83,7 +83,7 @@ spec:
             - name: TARANTOOL_WORK_DIR
               value: "/var/lib/tarantool"
             - name: TARANTOOL_MEMTX_MEMORY
-              value: "33554432"
+              value: "2147483648"
             - name: TARANTOOL_LOG
               value: "/dev/stdout"
             - name: TARANTOOL_ADVERTISE_HOST
