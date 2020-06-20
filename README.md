@@ -335,14 +335,14 @@ Nodes utilization during the test:
 
 Yandex.Tank configuration is the same as for `write` test.
 
-To emulate a failover we'll delete all leader nodes during the test:
-```bash
-kubectl delete po storage-0-0 storage-1-0 storage-2-0
-```
-
 Run test:
 ```bash
 yandex-tank -c load_write.yaml ammo_write.txt
+```
+
+To emulate a failover we'll delete all leader nodes during the test:
+```bash
+kubectl delete po storage-0-0 storage-1-0 storage-2-0
 ```
 
 HTTP and NET codes chart:
