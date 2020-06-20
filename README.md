@@ -333,4 +333,25 @@ Nodes utilization during the test:
 
 ### Failover test
 
-WIP
+Yandex.Tank configuration is the same as for `write` test.
+
+To emulate a failover we'll delete all leader nodes during the test:
+```bash
+kubectl delete po storage-0-0 storage-1-0 storage-2-0
+```
+
+Run test:
+```bash
+yandex-tank -c load_write.yaml ammo_write.txt
+```
+
+HTTP and NET codes chart:
+
+![load-read-http-net-codes](./screenshots/load-failover-http-net-codes.png)
+
+500 response code indicates leader switching due to deleted pods.
+
+Latency VS RPC chart:
+
+![load-read-latency-rps](screenshots/load-failover-latency-rps.png)
+
