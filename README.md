@@ -235,7 +235,7 @@ sysctl -p
 
 Before running `read` test we generated and uploaded 2 million records: simple key/value pairs.
 
-Example of Yandex.Tank configuration:
+Example of Yandex.Tank configuration for `read` test:
 ```yaml
 phantom:
   address: <EXTERNAL_IP>:8081
@@ -258,7 +258,7 @@ overload:
   token_file: "api_token.txt" # api token to access to Overload
 ```
 
-Run read test:
+Run test:
 ```bash
 yandex-tank -c load_read.yaml
 ```
@@ -280,7 +280,56 @@ Nodes utilization during the test:
 
 ### Write test
 
-WIP
+Example of Yandex.Tank configuration for `write` test:
+```yaml
+phantom:
+  address: <EXTERNAL_IP>:8081
+  instances: 10000 # number of processes (simultaneously working clients)
+  ammo_type: uripost
+  load_profile:
+    load_type: rps # requests per second load type
+    schedule: step(1, 10000, 1000, 10s) step(10000, 1000, 1, 10s) # load from 1 to 10k rpc each 10s then from 10k to 1
+console:
+  enabled: true
+telegraf:
+  enabled: false
+overload:
+  enabled: true
+  package: yandextank.plugins.DataUploader
+  token_file: "api_token.txt" # api token to access to Overload
+```
+
+Run test:
+```bash
+yandex-tank -c load_write.yaml ammo_write.txt
+```
+
+Where `ammo_write.txt` contains generated requests for Yandex.Tank in `uripost` format.
+Example:
+```bash
+[Host: <EXTERNAL_IP>]
+[Content-Type: application/json]
+[Connection: keep-alive]
+[User-Agent: Yandex.Tank]
+<body size in bytes> /url
+{"key": "<some-key>", "value": "<some-data>"}
+<body size in bytes> /url
+{"key": "<some-key>", "value": "<some-data>"}
+```
+
+HTTP and NET codes chart:
+
+![load-read-http-net-codes](./screenshots/load-write-http-net-codes.png)
+
+409 response code indicates attempts to write the same key.
+
+Latency VS RPC chart:
+
+![load-read-latency-rps](screenshots/load-write-latency-rps.png)
+
+Nodes utilization during the test:
+
+![load-read-node](./screenshots/load-write-node.png)
 
 ### Failover test
 
