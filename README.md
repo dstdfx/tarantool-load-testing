@@ -15,17 +15,19 @@ For educational purposes only.
   * [Clean up](#clean-up)  
 * [Deploy Prometheus and Grafana via Helm](#deploy-prometheus-and-grafana-via-helm)
 * [Load testing via Yandex.Tank](#load-testing-via-yandextank)  
-  * [Read test](#read-test)  
+  * [Install Yandex.Tank](#install-yandextank)
+  * [Tune loader VM](#tune-loader-vm)
   * [Write test](#write-test)  
+  * [Read test](#read-test)  
   * [Failover test](#failover-test)
-* WIP
 
 ## Environment
 
 - Kubernetes cluster v1.16.9
 - 3 worker nodes (Ubuntu 18.04 LTS 64-bit/2 vCPU/8 GB/30 GB)
-- Loader VM (Ubuntu 18.04 LTS 64-bit/8 vCPU/16 GB RAM/5 GB)  
+- Loader VM (Ubuntu 18.04 LTS 64-bit/8 vCPU/16 GB RAM/30 GB)  
 - Tarantool version: `v1.10.3-136-gc3c087d`
+- Yandex.Tank version: `1.12.8.1`
 
 Loader VM is used to run Yandex.Tank load testing from.
 
@@ -126,7 +128,7 @@ router                LoadBalancer   10.108.135.233   <EXTERNAL-IP>  8081:30523/
 Open `http://<EXTERNAL-IP>:8081` in your browser to access to web UI. 
 You can see the current topology of the cluster:
 
-![web-ui](./screenshots/web-ui.png)
+![web-ui](./screenshots/tarantool-web-ui.png)
 
 ### Scaling
 
@@ -188,16 +190,98 @@ Open `http://localhost:3000/login` in your browser to access to Grafana UI. Use 
 Add Prometheus data source and import prepared dashboard (id: 1860).
 
 As a result we can observe the utilization of our worker nodes:
+
 ![grafana-ui](./screenshots/grafana-ui.png)
 
 ## Load testing via Yandex.Tank
 
+### Install Yandex.Tank
+
+https://yandextank.readthedocs.io/en/latest/install.html#installation-from-pypi
+
+To visualize our test results we use [Overload](https://overload.yandex.net/).
+
+### Tune Loader VM
+
+To achieve top performance we should tune the source server system limits (all commands are running from loader VM):
+```bash
+ulimit -n 30000
+```
+
+Add these lines to `vim /etc/sysctl.conf`:
+```bash
+net.ipv4.tcp_max_tw_buckets = 65536
+net.ipv4.tcp_tw_reuse = 0
+net.ipv4.tcp_max_syn_backlog = 131072
+net.ipv4.tcp_syn_retries = 3
+net.ipv4.tcp_synack_retries = 3
+net.ipv4.tcp_retries1 = 3
+net.ipv4.tcp_retries2 = 8
+net.ipv4.tcp_rmem = 16384 174760 349520
+net.ipv4.tcp_wmem = 16384 131072 262144
+net.ipv4.tcp_mem = 262144 524288 1048576
+net.ipv4.tcp_max_orphans = 65536
+net.ipv4.tcp_fin_timeout = 10
+net.ipv4.tcp_low_latency = 1
+net.ipv4.tcp_syncookies = 0
+```
+
+Apply changed by running:
+```bash
+sysctl -p
+```
+
+### Read test
+
+Before running `read` test we generated and uploaded 2 million records: simple key/value pairs.
+
+Example of Yandex.Tank configuration:
+```yaml
+phantom:
+  address: <EXTERNAL_IP>:8081
+  instances: 10000 # number of processes (simultaneously working clients)
+  uris:
+    - <uris to visit>
+  load_profile:
+    load_type: rps # requests per second load type
+    schedule: step(1, 10000, 1000, 10s) step(10000, 1000, 1, 10s) # load from 1 to 10k rpc each 10s then from 10k to 1
+  headers:
+    - "[Host: <EXTERNAL_IP>]"
+    - "[Connection: keep-alive]"
+console:
+  enabled: true
+telegraf:
+  enabled: false
+overload:
+  enabled: true
+  package: yandextank.plugins.DataUploader
+  token_file: "api_token.txt" # api token to access to Overload
+```
+
+Run read test:
+```bash
+yandex-tank -c load_read.yaml
+```
+
+It'll take ~5 minutes to get test finished. After that we can see the results in Overload panel visiting 
+the link in the console.
+
+HTTP and NET codes chart:
+
+![load-read-http-net-codes](./screenshots/load-read-http-net-codes.png)
+
+Latency VS RPC chart:
+
+![load-read-latency-rps](./screenshots/load-read-latency-rps.png)
+
+Nodes utilization during the test:
+
+![load-read-node](./screenshots/load-read-node.png)
+
+### Write test
+
 WIP
 
-- Read test
-- Write test
-- Failover test (write but with killed masters)
-
-## Results
+### Failover test
 
 WIP
