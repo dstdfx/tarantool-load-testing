@@ -244,7 +244,7 @@ phantom:
     - <uris to visit>
   load_profile:
     load_type: rps # requests per second load type
-    schedule: step(1, 10000, 1000, 10s) step(10000, 1000, 1, 10s) # load from 1 to 10k rpc each 10s then from 10k to 1
+    schedule: step(1, 10000, 1000, 10s) step(10000, 1, 1000, 10s) # load from 1 to 10k rpc each 10s then from 10k to 1
   headers:
     - "[Host: <EXTERNAL_IP>]"
     - "[Connection: keep-alive]"
@@ -288,7 +288,7 @@ phantom:
   ammo_type: uripost
   load_profile:
     load_type: rps # requests per second load type
-    schedule: step(1, 10000, 1000, 10s) step(10000, 1000, 1, 10s) # load from 1 to 10k rpc each 10s then from 10k to 1
+    schedule: step(1, 10000, 1000, 10s) step(10000, 1, 1000, 10s) # load from 1 to 10k rpc each 10s then from 10k to 1
 console:
   enabled: true
 telegraf:
